@@ -4,22 +4,40 @@
     <meta charset="utf-8"/>
 
     <title>Snail</title>
-    <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+    <script src="http://code.jquery.com/jquery-2.2.4.js"></script>
     <script>
-        function myFunction() {
-            $.get("http://localhost:8080/snail?size="+ $('#in-size').val(), function(data) {
-                //As soon as the browser finished downloading, this function is called.
-                $('#demo').html(data);
-            });
+        var snailSize = 0;
+        var snailCount = 0;
+
+        function resetSnail() {
+            snailSize = $('#in-size').val();
+            snailCount = $('#in-progress').is(':checked') ? 0 : snailSize * snailSize -1;
+
         }
+        function updateSnail() {
+            snailCount++;
+            if (snailCount <= snailSize * snailSize) {
+                $.get("http://localhost:8080/snail?size=" + snailSize + "&count=" + snailCount, function(data) {
+                    //As soon as the browser finished downloading, this function is called.
+                    $('#demo').html(data);
+                });
+            }
+        }
+
+        $(document).ready(function() {
+            setInterval(updateSnail, 100);
+        });
     </script>
     <style type="text/css">
         table {
             border: medium solid #000000;
         }
 
-        td, th {
+        td {
             border: thin solid #6495ed;
+            width: 25px;
+            height: 25px;
+            text-align: center;
         }
     </style>
 </head>
@@ -27,10 +45,11 @@
 <h1>Snail</h1>
 <form name="subscribe" id="subscribe_frm" action="#">
 
-    <label for="in-size">Snail size: </label><input type="text" name="size" id="in-size"/>
+    <label for="in-size">Snail size: </label><input type="number" min="0" max="300" id="in-size" value="0"/>
 
-    <input type="button" name="submit" value="Submit"
-           onclick="myFunction();"/>
+    <label for="in-progress">Progressive </label><input type="checkbox" id="in-progress" checked/>
+
+    <input type="button" value="Submit" onclick="resetSnail();"/>
 
 </form>
 <div>

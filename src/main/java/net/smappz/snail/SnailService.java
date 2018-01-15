@@ -15,8 +15,8 @@ public class SnailService {
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/snail")
-    String snail(@RequestParam(value = "size") int size, Model model) {
-        return Snail.render(size);
+    String snail(@RequestParam(value = "size") int size, @RequestParam(value = "count") int count, Model model) {
+        return Snail.render(size, count);
     }
 
     public static void main(String[] args) throws Exception {
