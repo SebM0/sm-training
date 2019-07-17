@@ -11,14 +11,9 @@ class FileRePattern {
         return Files.list(folder)
                 .filter(f -> Files.isRegularFile(f))
                 .map(f -> {
-                    String fname = f.getFileName().toString();
-                    String name = fname;
-                    String ext = "";
-                    int index = fname.lastIndexOf(".");
-                    if (index > -1) {
-                        name = fname.substring(0, index);
-                        ext = fname.substring(index);
-                    }
+                    String[] nameAndExtension = FileToolBox.extractNameAndExtension(f);
+                    String name = nameAndExtension[0];
+                    String ext = nameAndExtension[1];
                     StringBuilder num = new StringBuilder();
                     for (char c : name.toCharArray()) {
                         if (Character.isDigit(c)) {
